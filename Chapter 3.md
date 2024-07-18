@@ -3,7 +3,9 @@
 Sometimes the *accuracy* is not the best method to determine if a model is good or not predicting. One of the possible problems with this measure could be the **class imbalance**, which occurs in classification problems when one of the class is more frequent that the others.
 ## Confusion matrix
 **Note**: In this topic I also take information from [here](https://towardsdatascience.com/understanding-confusion-matrix-a9ad42dcfd62).
+
 The **confusion matrix** is a performance measurement for machine learning classification.
+
 Given a binary classifier the are 4 possible combinations of *predicted* and *actual* values:
 
 - **true positive** ($tp$): you predicted <u>positive</u> and it is <u>true</u>
@@ -25,22 +27,30 @@ In the following matrix we can summarize the results:
 | Actual: negative | $tn$                | $fp$                |
 | Actual: positive | $fn$                | $tp$                |
 ### Accuracy
-This metric tell us *from all the classes (positive and negative), how many of them we have predicted correctly*
+This metric tell us *from all the classes (positive and negative), how many of them we have predicted correctly*.
+
 $$accurary = \dfrac{tp + tn}{tp + tn + fp + fn}$$
+
 ### Precision
 Also called as **positive predictive value**.
 This metric tell us *from all the classes we have predicted as positive, how many are actually positive*.
+
 $$precission = \dfrac{tp}{tp + fp}$$
+
 High precision means: lower false positive rate.
 
 ### Recall
 Also called **sensitivity**. 
 This metric tell us *from all possible classes, how many we predicted correctly*.
+
 $$recall = \dfrac{tp}{tp + fn}$$
+
 High recall means: lower false negative rate.
 ### F1 - score
 Is the harmonic mean of precision and recall, that means this metric gives equal weight to precision and recall.
+
 $$F1=2\cdot\dfrac{precision\cdot recall}{precision + recall}$$
+
 ## In scikit-learn
 
 ```python
@@ -90,4 +100,88 @@ logreg.fit(X_train, y_train)
 y_predict = logreg.predict(X_test)
 ```
 
-**Note**: the default probability threshold for logistic regression is `0.5`
+## Predicting Probabilities
+We can predict probabilities of each instance belonging to a class by calling logistic regression's `predict_proba()` method and passing the **test features** (`X_test`). This returns a 2-dimensional array with probabilities for both classes.
+
+In the [official documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.predict_proba) say that `predict_proba()` method:
+
+> **Parameters**:
+> `X`: array-like of shape (`n_samples`, `n_features`)
+> Vector to be scored, where `n_samples` is the number of samples and `n_features` is the number of features.
+
+> **Returns**:
+> `T`: array-like of shape (`n_samples`, `n_classes`)
+> Returns the probability of the sample for each class in the model, where classes are ordered as they are in `self.classes_`.
+
+Then, with the command:
+```python
+y_predict_probs = logreg.predict_proba(X_test)[:, 1]
+```
+
+We slice the second column, representing **the positive class probabilities**, and store the results as `y_pred_probs`.
+## Receiver Operating Characteristic (ROC) curve
+For this section I recommend to see the correspond section available in the [Crash Course](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc) of Google.
+
+The default probability threshold for logistic regression is `0.5`, but happens as we vary this threshold?
+
+In order to answer that question we are going to use the **Receiver Operating Characteristic curve** which is a graph showing the performance of classification model at all classification thresholds.
+
+The curve plots two parameters (one vs other):
+
+**True Positive Rates** (*Recall*)
+
+$$tpr=\dfrac{tp}{tp + fn}$$
+
+**False Positive Rates**
+
+$$fpr = \dfrac{fp}{fp + tn}$$
+
+An ROC curve plots $tpr$ vs. $fpr$ at different classification thresholds. Lowering the classification threshold classifies more items as positive, because with a threshold of `0` for every probability the model is going to predict `1` for all observations (correctly predict all positive values, and incorrectly predict all negative values).
+
+On the other side, a threshold of `1` the model predicts `0` for all the data because the are not probability greater than $1$.
+### Plotting ROC curve
+The function that we need to use is `roc_curve()` which is in `metrics`.
+
+**Parameters**:
+- `y_true`: True binary labels.
+- `y_score`: Target scores, can either be probability estimates of the positive class, confidence values, or non-threshold measure of decisions.
+
+**Returns**:
+- `fpr`: false positive rates.
+- `tpr`: true positive rates.
+- `thresholds`: Decreasing thresholds on the decision function used to compute `fpr` and `tpr`.
+
+```python
+# importing roc_curve function
+from sklearn.metrics import roc_curve
+
+# calling the function
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_probs)
+
+# plotting
+# line 45° to compare the ROC
+plt.plot([0, 1], [0, 1], 'k--')
+# plotting the fpr and tpr
+plt.plot(fpr, tpr)
+# title and labels
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Logistic Regression ROC curve')
+plt.show()
+```
+
+## Area Under the ROC curve
+The perfect model: `1` for the $tpr$ and `0` for $fpr$. For that reason we have the **Area Under the ROC curve** also called **AUC ROC** measures the entire two-dimensional area underneath the entire ROC curve from $(0,0)$ to $(1,1)$.
+
+AUC provides an aggregate measure of performance across all possible classification thresholds. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example.
+
+In a nutshell: if the return number after applying the `roc_curve_score` is close to `1` then the model performs better than randomly guessing the class of each observation. 
+
+```python
+from sklearn.metrics import roc_auc_score
+print(roc_auc_score(y_test, y_pred_probs))
+```
+
+
+
+The topic of Logistic Regression and in particular, the ROC curve, is a crash course; if you don't know anything about the topic you need to search in other sites (I included the corresponding links from Google and one blog).
