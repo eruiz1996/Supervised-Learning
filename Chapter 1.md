@@ -103,7 +103,7 @@ To split the data we used the `train_test_split` function that has the following
 - `y`: target values.
 - `test_size`:  represent the proportion of the dataset to include in the test split (0 to 1).
 - `random_state`: set a seed for random number generator that splits the data.
-- `stratify`: if we take equal to `y` then [ensure](ensure) our split reflects the proportion of labels in our training and datasets.
+- `stratify`: if we take equal to `y` then [ensure](Vocabulary) our split reflects the proportion of labels in our training and datasets.
 **Notes**
 - The first two arguments `X` and `y` appears in the official documentation as `*array`
 - The proportion for `test_size` is commonly around 0.2 to 0.3
