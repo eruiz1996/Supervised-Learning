@@ -1,4 +1,4 @@
-# Definitions
+# Glossary
 1. **Machine Learning**: A field of computer science that focuses on developing algorithms that allow computers to learn from and make predictions based on data.
 2. **Unsupervised Learning**: A type of machine learning that identifies patterns in data without using labeled responses.
 3. **Supervised Learning**: A type of machine learning where the model is trained on labeled data, meaning the output is known and used to guide the learning process.
@@ -26,6 +26,13 @@
 25. **Ridge Regression**: A type of regularized regression that adds a penalty equal to the sum of the squared coefficients to the loss function.
 26. **Lasso Regression**: A type of regularized regression that adds a penalty equal to the sum of the absolute values of the coefficients to the loss function.
 27. **Hyperparameter**: A parameter whose value is set before the learning process begins and controls the behavior of the training algorithm or model.
+28. **Class imbalance**: 
+29. **Confusion matrix**:
+30. **Precision**:
+31. **Recall**:
+32. **F1-Score**:
+33. **Logistic Regression**:
+34. 
 ---
 # Acronyms
 - **ML**: Machine Learning
@@ -35,3 +42,4 @@
 - **LRM**: Linear Regression Model
 - **EF**: Error Function
 - **OLS**: Ordinary Least Squares
+- **LR**: Logistic Regression
