@@ -32,6 +32,7 @@ Using the **Linear Regression Model** (LRM) but without predict a new value:
 1. Import the `LinearRegression` class and create an instance.
 2. Fit the model to all of the features observations with `.fit()` method.
 3. Create the predictions with `.predict()` method passing the features.
+
 Because we predict are predicting data using the same data for the training, then we've a straight line that fits in the best way for our data.
 ```python
 from sklearn.linear_model import LinearRegression
@@ -52,7 +53,9 @@ Click [here](https://scikit-learn.org/stable/modules/generated/sklearn.linear_mo
 ## Practice
 ### Creating features
 
-In this chapter, you will work with a dataset called `sales_df`, which contains information on advertising campaign expenditure across different media types, and the number of dollars generated in sales for the respective campaign. The dataset has been preloaded for you. Here are the first two rows:
+In this chapter, you will work with a dataset called `sales_df`, which contains information on advertising campaign expenditure across different media types, and the number of dollars generated in sales for the respective campaign. 
+
+The dataset has been preloaded for you. Here are the first two rows:
 
 ```
      tv        radio      social_media    sales
@@ -121,32 +124,43 @@ plt.show()
 # The basics of LRM
 ## Regression Mechanics
 The equation for the line in two dimensions (features vs targets) is:
+
 $$y = ax + b$$
+
 where:
 - `y`: target
 - `x`: single feature
 - `a,b`: parameters/coefficients of the model - slope, intercept
+
 **Note**: The parameters `a` and `b` are precisely those we want to adjust (learn).
 ### Error functions (EF)
 Also called **loss functions** or **cost functions** help us to choose the values for `a` and `b` following:
 - Define an EF for any given line
 - Choose the line that minimizes the EF
+
 The most used EF is the **Residual Sum of Squares** (RSS) which:
 - Takes the sum of the *residuals* (real value vs predicted value)
 - Square each residual (to avoid compensations with positives and negatives)
 - Sum all the square residuals (EF)
+
 The formula is:
+
 $$RSS = \sum_{i=1}^n(y_i-\hat{y_i})^2$$
+
 where:
 - $y_i$ is the `i`-*real* target value
 - $\hat{y_i}$ is the `i`- *predicted* target value of the LMR
+
 The type of LRM where we aim to minimize the RSS is called **Ordinary Least Squares** (OLS)
 ## LRM in higher dimensions
 When we have $n$ features to fit the target instead of just one we need to use the following equation:
+
 $$y = a_1x_1 + a_2x_2 + \ldots + a_nx_n + b$$
+
 For multiple linear regression models, scikit-learn expects one variable each for feature and target values.
 ## Different EF
 The default metric for measure the accuracy is the $R^2$ which quantifies the amount of variance in target values explained by the features.
+
 The range is 0 to 1 where 1 means the features completely explain the target's variance.
 ## LRM using all features
 1. Import the `train_test_split` function and the `LinearRegression` class.
@@ -159,9 +173,7 @@ The range is 0 to 1 where 1 means the features completely explain the target's v
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, 
-													test_size = 0.3,
-													random_state = 42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 reg_all = LinearRegression()
 reg_all.fit(X_train, Y_train)
 y_pred = reg_all.predict(X_test)
@@ -169,9 +181,13 @@ reg_all.score(X_test, y_test)
 ```
 ### Mean Squared Error and Root Mean Squared Error
 Another way to [assess](Vocabulary.md) a regression model performance is using the Mean Squared Error ($MSE$).
+
 $$MSE = \dfrac{1}{n}\sum_{i=1}^n(y-\hat{y_i})^2$$
+
 The problem with the $MSE$ EF is measure the results in squares and for that reason we've the $RMSE$ which takes square root.
+
 $$RMSE = \sqrt{MSE}$$
+
 ```python
 from skalearn.metrics import mean_squared_error
 
@@ -180,7 +196,7 @@ mean_square_error(y_test, y_pred, squared=False)
 ```
 ## Practice
 ### Fit and predict for regression
-Now you have seen how linear regression works, your task is to create a multiple linear regression model using all of the features in the `sales_df` dataset, which has been preloaded for you. As a reminder, here are the first two rows:
+Now you have seen how linear regression works, your task is to create a multiple linear regression model using all of the features in the `sales_df` dataset, which has been preloaded for you. As a reminder, here are the first two rows:
 
 ```
      tv        radio      social_media    sales
@@ -234,6 +250,7 @@ print("RMSE: {}".format(rmse))
 # Cross Validation (CV)
 When we're computing $R^2$ on our test set there is a potential [pitfall](Vocabulary.md) in the process: *the model performance is dependent on the way we split up the data*. 
 In other words: the data points in the test set may have some peculiarities that mean the $R^2$ computed on it is not representative of the model's ability to generalize to unseen data.
+
 In order to avoid this problem, we use the **Cross Validation (CV)** process, which consists of the following steps:
 
 1. **Splitting the data multiple times**: Instead of splitting the data into just one training and test set, we split the data into multiple training and test sets. This allows us to train and evaluate the model on different subsets of the data.
@@ -247,12 +264,18 @@ Several cross-validation techniques can be used, depending on the nature of the 
 - The data is divided into $k$ equally sized folds.
 - The model is trained $k$ times, each time using $k−1$ folds as the training set and the remaining fold as the test set.
 - The $k$ results are averaged to produce a single performance estimate
+
 One of the advantages of use the CV is that you can obtain statistics like mean, median, standard deviation, and quantiles.
+
 **Note**: the method `np.quantile(a, q)` compute the `q`-th quantile of `a`. It is important to notice that if you want the 99% confidence interval of the data `df` then
+
 `np.quantile(df, [0.005, 0.995])`
+
 because the range is from 
+
 $$\left(\dfrac{0.01}{2}, 1-\dfrac{0.01}{2}\right)$$
-I don't find more information in the [official documentation](https://numpy.org/doc/stable/reference/generated/numpy.quantile.html) but for me they suppose that the *ECDF* is normal distributed, and for that reason you ignore the two tails.
+
+I didn't find more information in the [official documentation](https://numpy.org/doc/stable/reference/generated/numpy.quantile.html) but for me they suppose that the *ECDF* is normal distributed, and for that reason you ignore the two tails.
 
 ```python
 from sklearn.model_selection import cross_val_score, KFold
@@ -273,7 +296,9 @@ print(np.quantile(cv_results, [0.025, 0.975])) # it should range from 2.5% to 
 Regularized means *to penalize large coefficients* in order to avoid the **overfitting**.
 ## Ridge regression
 In this type of regularized regression we add to the EF a **ridge** which penalizes large positive or negative coefficients.
+
 $$EF_{new} = EF_{OLS}+\alpha\sum_{i=1}^{n}a_{i}^2$$
+
 where
 - $EF_{new}$: new Error Function.
 - $EF_{OLS}$: normal Error Function which minimize the OLS.
@@ -307,13 +332,17 @@ print(scores)
 ```
 ## Lasso regression
 In the Lasso regression we change the EF as following:
+
 $$EF_{new}=EF_{OLS}+\alpha\sum_{i=1}^{n}|a_i|$$
+
 In scikit-learn the process is the same as with **Ridge regression** but importing `Lasso`.
+
 Advantages of using Lasso:
 - Can select important features of a dataset
 	- Shrinks the coefficients of less importance to zero, and
 	- Features not shrunk to zero are selected by Lasso
 - Allows us to communicate results to non-technical audiences
+
 Lets see an example of the second point:
 ```python
 import matlplotlib.pyplot as plt
