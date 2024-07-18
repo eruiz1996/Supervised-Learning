@@ -32,7 +32,8 @@
 31. **Recall**:
 32. **F1-Score**:
 33. **Logistic Regression**:
-34. 
+34. **Receiver Operating Characteristic curve**
+35. **Area Under the ROC curve**
 ---
 # Acronyms
 - **ML**: Machine Learning
@@ -43,3 +44,5 @@
 - **EF**: Error Function
 - **OLS**: Ordinary Least Squares
 - **LR**: Logistic Regression
+- **ROC**: Receiver Operating Characteristic
+- **AUC ROC**: Area Under the ROC
