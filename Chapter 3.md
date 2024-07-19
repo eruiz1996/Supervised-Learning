@@ -181,7 +181,74 @@ In a nutshell: if the return number after applying the `roc_curve_score` is clos
 from sklearn.metrics import roc_auc_score
 print(roc_auc_score(y_test, y_pred_probs))
 ```
+---
+# Hyperparameter tuning
+The **hyperparameters** are the parameters that we need to specify before fitting the model (likes `alpha` and `n_neighbors`).
 
+The process of **hyperparameter tuning** consist in:
+1. Try lots of different hyperparameter values
+2. Fit all of them separately
+3. See how well they perform
+4. Choose the best performing values
 
+We can perform the tuning doing two different methods:
+- Exhaustion:
+	- Use `GridSearchCV`
+	- Take all the possible combinations ($kf\cdot num\_hyperparameters\cdot total\_values$)
+- Randomized:
+	- Use`RandomizedSearchCV`
+	- Take random combinations
+
+**Note**: for both models we use the attributes `.best_params_` and `.best_score_`
+
+## Exhaustion
+```python
+from sklearn.model_selection import GridSearchCV
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+param_grid = {
+			  'alpha':np.arange(0.0001, 1, 10),
+			  'solver':['sag','lsqr']
+}
+ridge = Ridge()
+ridge_cv = GridSearchCV(ridge, param_grid, cv=kf)
+rige_cv.fit(X_train, y_train)
+print(ridge_cv.best_params_, ridge_cv.best_score_)
+```
+
+## Randomized
+```python
+from sklearn.model_selection import RandomizedSearchCV
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+param_grid = {
+			  'alpha':np.arange(0.0001, 1, 10),
+			  'solver':['sag','lsqr']
+}
+ridge = Ridge()
+ridge_cv = RandomizedSearchCV(ridge, param_grid, cv=kf, n_iter=2)
+rige_cv.fit(X_train, y_train)
+print(ridge_cv.best_params_, ridge_cv.best_score_)
+
+# evaluating test set
+test_score = rigde_cv.score(X_test, y_test)
+print(test_score)
+```
+
+**Note**
+
+The parameter `param_grid` could have as many parameters as we want. For example, the following code:
+
+```python
+params = {"penalty": ["l1", "l2"],
+         "tol": np.linspace(0.0001, 1.0, 50),
+         "C": np.linspace(0.1, 1.0, 50),
+         "class_weight": ["balanced", {0:0.8, 1:0.2}]}
+```
+
+Have in `params`:
+- `"l1"` and `"l2"` as `penalty` values 
+-  a range of `50` float values between `0.1` and `1.0` for `C`
+- `class_weight` to either `"balanced"` or a dictionary containing `0:0.8, 1:0.2`.
 
 The topic of Logistic Regression and in particular, the ROC curve, is a crash course; if you don't know anything about the topic you need to search in other sites (I included the corresponding links from Google and one blog).
