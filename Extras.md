@@ -26,14 +26,14 @@
 25. **Ridge Regression**: A type of regularized regression that adds a penalty equal to the sum of the squared coefficients to the loss function.
 26. **Lasso Regression**: A type of regularized regression that adds a penalty equal to the sum of the absolute values of the coefficients to the loss function.
 27. **Hyperparameter**: A parameter whose value is set before the learning process begins and controls the behavior of the training algorithm or model.
-28. **Class imbalance**: 
-29. **Confusion matrix**:
-30. **Precision**:
-31. **Recall**:
-32. **F1-Score**:
-33. **Logistic Regression**:
-34. **Receiver Operating Characteristic curve**
-35. **Area Under the ROC curve**
+28. **Class imbalance**: When the classes in a dataset are not represented equally.
+29. **Confusion matrix**: A table used to evaluate the performance of a classification model by comparing actual and predicted labels.
+30. **Precision**: The ratio of true positive predictions to the total predicted positives.
+31. **Recall**: The ratio of true positive predictions to the total actual positives.
+32. **F1-Score**: The harmonic mean of precision and recall.
+33. **Logistic Regression**: A statistical model used for binary classification.
+34. **Receiver Operating Characteristic curve**: A graphical plot illustrating the diagnostic ability of a binary classifier.
+35. **Area Under the ROC curve**: A measure of the overall performance of a binary classification model.
 ---
 # Acronyms
 - **ML**: Machine Learning
