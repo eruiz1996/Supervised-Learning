@@ -34,6 +34,7 @@
 33. **Logistic Regression**: A statistical model used for binary classification.
 34. **Receiver Operating Characteristic curve**: A graphical plot illustrating the diagnostic ability of a binary classifier.
 35. **Area Under the ROC curve**: A measure of the overall performance of a binary classification model.
+36. **Dummy variables**: 
 ---
 # Acronyms
 - **ML**: Machine Learning
