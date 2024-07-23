@@ -10,6 +10,7 @@ Example: given the categories `red`, `green`, and `blue` create the dummy variab
 | red   |  1  | 0     | 0    |
 | green |  0  | 1     | 0    |
 | blue  |  0  | 0     | 1    |
+
 But, note that if a color is not in the first two colors then the color needs to be `blue`. So we can delete the last column in order to not repeat information.
 
 | color | red | green |
@@ -22,7 +23,7 @@ To create dummy variables we can use:
 - `OneHotEncoder` using `scikit-learn`
 - `get_dummies` using `pandas`
 ### Using `get_dummies()`
-The [official documentation](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) we have the following syntax:
+In the [official documentation](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) we have the following syntax:
 ```python
 pandas.get_dummies(data,drop_first=False)
 ```
@@ -71,10 +72,7 @@ print(np.sqrt(-linreg_cv))
 ```
 **Note**: we used the `scoring` parameter with the *negative mean squared error* because `scikit-learn`'s cross-validation metrics presume a higher score is better, so $MSE$ is changed to negative to counteract it.
 
-Commits:
-Chapter 3: I include a link to a concept Chapter 4
-Chapter 4: dummy variables
-Extras: adding new definitions
 
-Comments:
+# Comments:
 The dummy variables is an important topic but I felt that they only mentioned, don't really explain it.
+
