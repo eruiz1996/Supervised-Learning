@@ -291,6 +291,8 @@ print(np.std(cv_results))
 # Print the 95% confidence interval
 print(np.quantile(cv_results, [0.025, 0.975])) # it should range from 2.5% to 97.5%
 ```
+**Note**: the `cross_val_score` has the parameter `scoring` which give us the opportunity to specify the score function. In [Chapter 4](Chapter%204#Linear%20regression%20with%20dummy%20variables) there is an example.
+
 ---
 # Regularized regression
 Regularized means *to penalize large coefficients* in order to avoid the **overfitting**.
