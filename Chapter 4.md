@@ -72,7 +72,112 @@ print(np.sqrt(-linreg_cv))
 ```
 **Note**: we used the `scoring` parameter with the *negative mean squared error* because `scikit-learn`'s cross-validation metrics presume a higher score is better, so $MSE$ is changed to negative to counteract it.
 
+---
+# Handling missing data
+The missing data is when there is no a value for a feature in a particular record.
+To obtain a sort list of missing values for each field of the data-frame `df` we use the following command: 
+```python
+print(df.isna().sum().sort_values())
+```
+## Dropping missing data
+A common approach is to remove missing data observations accounting for less than 5% of all data. The pandas method to do is `dropna()`.
+```python
+df = df.dropna(subset=['col1', 'col2', 'col3'])
+```
+where `'col1'`, `'col2'`, and `'col3'` **are columns with less than 5% values of all data.**
+## Imputing values
+Impute values means making educated guesses (with expertise) as to what the missing values could be. For numerical values is common use the **mean** or **median** (depends on the data) and for categorical data, the **mode**.
+
+We must split our data before imputing in order to avoid *data leakage*.
+### Imputing algorithm
+- **Import** `SimpleImputer`
+- **Split** the numerical and categorical data
+- **Train model**: categorical and numerical data must share target values and `random_state`
+- **Impute data**: the same process for categorical and numerical data
+	- Instantiate `SimpleImputer` with an strategy
+	- Transform train data with `.fit_transform()`
+	- Transform test data with `.transform()`
+- **Join** categorical and numerical data for train and test features.
+```python
+from sklearn.impute import SimpleImputer
+
+# SPLIT DATA
+# features with categorical data
+X_cat = music_df['genre'].values.reshape(-1, 1)
+# features with numerical data
+X_num = music_df.drop(['genre', 'popularity'], axis=1).values
+# target values
+y = music_df['popularity'].values
+
+# TRAIN MODEL
+# train categorical
+X_train_cat, X_test_cat, y_train, y_test = train_test_split(X_cat, y, text_size=0.2, random_state=42)
+# train numerical
+X_train_num, X_test_num, y_train, y_test = train_test_split(X_num, y, text_size=0.2, random_state=42)
+
+# IMPUTE: categorical data
+# instantiate imputer with a strategy
+imp_cat = SimpleImputer(strategy='most_frequent')
+# transform train data
+X_train_cat = imp_cat.fit_transform(X_train_cat)
+# transform test data
+X_test_cat = imp_cat.transform(X_test_cat)
+
+# IMPUTE: numerical data
+# instantiate imputer with a strategy
+imp_num = SimpleImputer(strategy='mean')
+# transform train data
+X_train_num = imp_num.fit_transform(X_train_num)
+# transform test data
+X_test_num = imp_num.transform(X_test_num)
+
+# JOIN DATA
+# train data
+X_train = np.append(X_train_num, X_train_cat, axis=1)
+# test data
+X_test = np.append(X_test_num, X_test_cat, axis=1)
+```
+**Note**: when we instantiate a `SimpleImputer` object, by default the strategy is the mean. See more details in the [official documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html)
+## Imputing with pipeline
+Due to the ability to transform data the imputers are known as **transformers**.
+
+The **pipeline** is an object used to run a series of transformations and build a model in a single workflow. It can say that a pipeline is a sequence of data transformers with an optional final predictor.
+
+**Example**: in the following script we perform binary classification to predict whether a song is rock or another genre.
+```python
+from sklearn.linear_model import LogisticRegressionfrom
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+
+# drop missing values
+music_df = music_df.dropna(subset=['genre','popularity', 'loudness', 'liveness', 'tempo'])
+# convert values: 1-rock, 0-another genre
+music_df['genre'] = np.where(music_df['genre'] == 'Rock', 1, 0)
+# features
+X = music_df.drop('genre', axis=1).values
+# target values
+y = music_df['genre'].values
+
+# define the pipeline's steps
+steps = [
+		 ('imputation', SimpleImputer()),
+		 ('logistic_regression', LogisticRegression())
+		 ]
+# instantiate Pipeline
+pipeline = Pipeline(steps)
+
+# train the model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+pipeline.fit(X_train, y_train)
+
+# predict
+pipeline.score(X_test, y_test)
+```
+Read more about pipelines [here](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html)
 
 # Comments:
 The dummy variables is an important topic but I felt that they only mentioned, don't really explain it.
 
+I liked the topic of imputing data because they explain the transformers and how to use pipelines.
+
+ 
