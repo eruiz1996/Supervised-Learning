@@ -175,7 +175,149 @@ pipeline.score(X_test, y_test)
 ```
 Read more about pipelines [here](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html)
 
-# Comments:
+---
+# Centering and scaling
+It is important to scale our data because features scales can disproportionately influence the model, that means we want features to be on a similar scale.
+
+The process of scaling and centering is called **normalizing**.
+## Scale data
+### Standardization
+Consist in subtract the mean and divide by variance. Makes that all the features are centered around zero and have a variance of one which means distributed as a $N(0,1)$
+### Min-max
+Consist in subtract the minimum and divide by the range.
+- Minimum value: `0`
+- Maximum value: `1`
+### Normalize
+Consist in center the data in the ranges from `-1` to `1`
+
+## Scaling in scikit-learn
+1. Import scale form `preprocessing`
+2. Split the data
+3. Scale the train a test data
+```python
+from sklearn.preprocessing import StandardScaler
+
+# features and target values
+X = music _ df.drop("genre" , axis=1).values
+y = music _ df["genre"].values 
+
+# model train
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train) 
+X_test_scaled = scaler.transform(X_test)
+
+print(np.mean(X), np.std(X))
+print(np.mean(X_train_scaled), np.std(X_train_scaled))
+```
+## Scaling in a pipeline
+We can also use a pipeline for scaling
+```python
+# define pipeline's steps 
+steps = [('scaler' , StandardScaler()), 
+		 ('knn' , KNeighborsClassifier(n_neighbors=6))
+		 ]
+# create pipeline
+pipeline = Pipeline(steps)
+
+# train model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=21)
+knn_scaled = pipeline.fit(X_train, y_train)
+
+# predict values
+y_pred = knn_scaled.predict(X_test)
+print(knn_scaled.score(X_test, y_test))
+```
+## CV and scaling in a pipeline
+Finally, we can use CV with pipeline.
+```python
+from sklearn.model_selection import GridSearchCV
+steps = [
+		 ('scaler' , StandardScaler()),
+		 ('knn' , KNeighborsClassifier())
+		 ]
+pipeline = Pipeline(steps)
+
+# define range for hyperparameters
+parameters = {"knn__n_neighbors": np.arange(1, 50)}
+# train model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=21)
+
+# apply CV
+cv = GridSearchCV(pipeline, param_grid=parameters)
+cv.fit(X_train, y_train) 
+y_pred = cv.predict(X_test)
+
+# print best score and params to achive it
+print(cv.best_score_)
+print(cv.best_params_)
+```
+
+---
+# Evaluating multiple models
+To decide which is the best model it is going to depend in different factors because there are *different models for different problems*.
+
+Some of the guide principles are:
+- **Size of dataset**
+	- <u>Fewer features</u> means *simple models* and *faster training time*
+	- Some models, as neural networks, require large amounts of data to perform well
+- **Interpretability**: Some models are <u>easier to explain</u>. For example, *linear regression* has a high interpretability as we can understand the coefficients.
+- **Flexibility**
+	- May improve accuracy by making <u>fewer assumptions</u> about data. For example, *KNN* is more flexible model than linear regression, because doesn't assume any linear relationships.
+Due to `scikit-learn` allows the same methods for any model it is easy to compare the performance:
+- Regression model:
+	- RMSE
+	- R-squared
+- Classification model performance
+	- Accuracy
+	- Precision, recall, F1-score
+	- ROC AUC
+The best practice is to scale our data before evaluating models.
+## Evaluating classification models
+```python
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import cross_val_score, KFold, train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_ model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+
+# features and target values
+X = music.drop("genre" , axis=1).values
+y = music["genre"].values
+# split the data in train and test
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+
+# scaling
+scaler = StandardScaler() 
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# models to compare
+models = {
+	  "Logistic Regression": LogisticRegression(),
+	  "KNN": KNeighborsClassifier(),
+	  "Decision Tree": DecisionTreeClassifier()
+} 
+results = []
+# evaluate each model
+for model in models.values():
+	kf = KFold(n_splits=6, random_state=42, shuffle=True)
+	cv_results = cross_val_score(model, X_train_scaled, y_train, cv=kf) 
+# graphic to compare
+plt.boxplot(results, labels=models.keys())
+plt.show()
+
+# Test set performance
+for name, model in models.items():
+	# train model
+	model.fit(X_train_scaled, y_train)
+	# get accuracy
+	test_score = model.score(X_test_scaled, y_test)
+	print("{} Test Set Accuracy: {}".format(name, test_score))
+```
+# Comments
 The dummy variables is an important topic but I felt that they only mentioned, don't really explain it.
 
 I liked the topic of imputing data because they explain the transformers and how to use pipelines.
