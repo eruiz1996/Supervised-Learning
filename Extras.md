@@ -34,7 +34,11 @@
 33. **Logistic Regression**: A statistical model used for binary classification.
 34. **Receiver Operating Characteristic curve**: A graphical plot illustrating the diagnostic ability of a binary classifier.
 35. **Area Under the ROC curve**: A measure of the overall performance of a binary classification model.
-36. **Dummy variables**: 
+36. **Dummy variables**: Categorical variables converted into a series of binary variables (`0` or `1`) to be used in regression or classification models.
+37. **Missing data**: Instances where no data value is stored for a variable in an observation. This can happen due to various reasons like data entry errors or data not being recorded.
+38. **Imputing values**: The process of replacing missing data with substituted values, like the mean, median, or a predicted value based on other observations. Imputers are also called transformers.
+39. **Data leakage**: When information from outside the training dataset is used to create the model, causing it to perform well on the training data but fail to generalize to new data.
+40. **Pipeline**: A sequence of data processing steps applied in order, where each step's output is the next step's input. In scikit-learn, it helps automate machine learning workflows.
 ---
 # Acronyms
 - **ML**: Machine Learning
