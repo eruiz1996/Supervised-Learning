@@ -250,5 +250,3 @@ Have in `params`:
 - `"l1"` and `"l2"` as `penalty` values 
 -  a range of `50` float values between `0.1` and `1.0` for `C`
 - `class_weight` to either `"balanced"` or a dictionary containing `0:0.8, 1:0.2`.
-
-The topic of Logistic Regression and in particular, the ROC curve, is a crash course; if you don't know anything about the topic you need to search in other sites (I included the corresponding links from Google and one blog).
