@@ -1,8 +1,3 @@
----
-tags:
-  - Python
-  - scikit-learn
----
 # Introduction to regression
 In the regression the target variable typically has continuos values.
 ## Creating feature and target arrays
