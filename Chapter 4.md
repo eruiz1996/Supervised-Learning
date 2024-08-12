@@ -317,9 +317,5 @@ for name, model in models.items():
 	test_score = model.score(X_test_scaled, y_test)
 	print("{} Test Set Accuracy: {}".format(name, test_score))
 ```
-# Comments
-The dummy variables is an important topic but I felt that they only mentioned, don't really explain it.
-
-I liked the topic of imputing data because they explain the transformers and how to use pipelines.
 
  
