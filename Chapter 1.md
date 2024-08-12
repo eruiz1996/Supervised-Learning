@@ -1,9 +1,4 @@
----
-tags:
-  - "#Python"
-  - scikit-learn
----
-# Machine learning with scikit-learn
+# Machine learning with `scikit-learn`
 ## What is Machine Learning (ML)?
 Is the process [whereby](Vocabulary.md):
 - Computers are giben the ability to learn
@@ -160,3 +155,36 @@ plt.xlabel("Number of Neighbors")
 plt.ylabel("Accuracy")
 plt.show()
 ```
+# Summary
+**Machine Learning (ML)**:
+- Computers learn from data without explicit programming.
+
+**Unsupervised Learning**:
+- Finds hidden patterns in unlabeled data.
+
+**Supervised Learning (SL)**:
+- Predicts known target values using features. Includes:
+    - **Classification**: Categorical targets.
+    - **Regression**: Continuous targets.
+
+**SL Requirements**:
+- No missing values, numeric data, stored in pandas Data-frame or NumPy array.
+
+**scikit-learn Syntax**:
+- Import model, instantiate, fit to data, predict.
+
+**Classification Challenge**:
+- Build model, train with labeled data, predict unseen data labels.
+
+**K-Nearest Neighbors (KNN)**:
+- Predicts labels based on closest labeled data points using majority voting.
+
+**Model Performance**:
+- Use accuracy metric, split data into *training*/*testing* sets.
+
+**Model Complexity**:
+- Larger $k$ = simpler, less sensitive model (*underfitting*).
+- Smaller $k$ = complex, sensitive model (*overfitting*).
+
+**Over/Underfitting**:
+- Evaluate model accuracy on training/test sets with varying $k$ values.
